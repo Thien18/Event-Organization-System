@@ -11,9 +11,9 @@ const db = new sqlite3.Database('./DATA.db', sqlite3.OPEN_READWRITE, (err) =>{
 // );
 
 // `;
-// sql = `INSERT INTO roles (id, name) VALUES
-// ('1', 'Admin'),
-// ('2', 'User');`
+sql = `INSERT INTO roles (id, name) VALUES
+('1', 'Admin'),
+('2', 'User');`
 /*
 CREATE TABLE account (
     email VARCHAR(50) PRIMARY KEY,

@@ -5,11 +5,7 @@ module.exports = {
     await queryInterface.createTable('Users', {
       id: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
-      },
-      id: {
         type: Sequelize.STRING
       },
       email: {
@@ -17,7 +13,7 @@ module.exports = {
         allowNull: false,
         references: {
           model: 'Accounts',
-          key: 'id'
+          key: 'email'
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'

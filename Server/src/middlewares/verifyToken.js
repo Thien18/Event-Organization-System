@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const db = require('../models/index')
 const Account = db.Account;
+
 const verifyToken = (req, res, next) => {
     const token = req.headers.authorization;
     if (!token)
@@ -38,7 +39,8 @@ const verifyToken = (req, res, next) => {
 };
 
 const isAdminSystem = (async (req, res, next) => {
-    if (req.account.role_id !=='1') {
+
+    if (req.account.role_id !='1') {
         return res.status(401).json({
             success: false,
             message: 'You are not the admin of this sytem',

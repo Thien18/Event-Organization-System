@@ -11,9 +11,8 @@ const crypto = require("crypto");
 const { Op } = require("sequelize");
 
 
-const register= async ({ email, password, phone_number }, res) => {
+const register= async ({ email, password, phone_number, name, address, gender }, res) => {
     try {
-        console.log("sssssssss", password);
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
         const resetExpires = Date.now() + 2 * 60 * 1000;
         const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(8));
@@ -23,7 +22,6 @@ const register= async ({ email, password, phone_number }, res) => {
         const [account, created] = await Account.findOrCreate({
             where: { email },
             defaults: {
-                id ,
                 email,
                 password: hashPassword,
                 role_id: "2",
@@ -34,9 +32,23 @@ const register= async ({ email, password, phone_number }, res) => {
                 status: true,
             },
         });
-        // Gửi email với mã OTP
+        const genderstr = gender == 1 ? "Nam" : "Nữ";
+        const [user, createdu] = await User.findOrCreate({
+            where: { email },
+            defaults: {
+                id,
+                email,
+                name,
+                address,
+                gender : genderstr
+            },
+        });
+        // Gửi email với mã OTP 
+        /**SELECT * FROM Accounts
+PRAGMA foreign_keys=off;
+DELETE FROM Accounts WHERE email = 'thien2001@gmail.com'; */
         
-        const status = created ? 201 : 409;
+        const status = created && createdu ? 201 : 409;
         return res.status(status).json({
             message: created ? "register successfully" : "register fail",
         });
@@ -131,7 +143,9 @@ const login = async ({ email, password }, res) => {
         const account = await Account.findOne({
             where: { email },
         });
-
+        if (!account.status === true) {
+            return res.status(404).json({ message: "Account has been locked" });
+        }
         if (!account) {
             return res.status(404).json({ message: "Email hasn't been registered" });
         }

@@ -24,17 +24,17 @@ const register = async (req, res) => {
     try {
         // Validate data
 
-        const { email, password, phone_number } = req.body;
+        const { email, password, phone_number , name, address, gender } = req.body;
 
-        const { error } = joi.object({ email, password, phone_number }).validate(req.body);
+        const { error } = joi.object({ email, password, phone_number , name, address, gender}).validate(req.body);
         if (error)
             return res.status(400).json({
                 message: error.details[0].message,
-            });
+        });
 
 
-        const accountData = { email, password, phone_number }
-
+        const accountData = { email, password, phone_number , name, address, gender}
+        
         const response = await authServices.register(accountData, res);
 
         return response
