@@ -11,6 +11,7 @@ import { GestureHandlerRootView} from 'react-native-gesture-handler'
 
 function Login() {
     const navigation = useNavigation();
+    
   return (
     <View style={styles.container}>
       <View style={styles.Middle}>

@@ -11,15 +11,59 @@ import { alignContent, flex, flexDirection, width } from 'styled-system';
 
 function Signup() {
     const navigation = useNavigation();
+  
+    const [fullname, setFulname] = useState('');
+    const [address, setAddress] = useState('');
     const [selectedGender, setSelectedGender] = useState(null);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [repassword, setrePassword] = useState('');
+    const [submit, setSubmit] = useState(false);
+    const [phone_number, setPhonenumber] = useState('');
 
     const handleGenderSelect = (gender) => {
+    
     setSelectedGender(gender);
+    }
+
+    const handleRegister = () => {
+      handleCheckInput();
+      
+    };
+    const handleCheckInput = () => {
+
+      if (validateEmail()) {
+       
+          setSubmit(true);
+         
+      } else {
+          // email is not valid or does not end with "@gmail.com"
+          setSubmit(false);
+          alert('Email chưa đúng định dạng');
+      }
+
+      if(validatePassword()){
+        setSubmit(true);
+      }else{
+        setSubmit(false);
+        alert('Xác nhận mật khẩu chưa chính xác');
+      }
+  };
+
+
+    const validateEmail = () => {
+      // Sử dụng biểu thức chính quy để kiểm tra cấu trúc của email
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    }
+    const validatePassword = () => {
+      // Kiểm tra mật khẩu và mật khẩu xác nhận có trùng khớp nhau hay không
+      return password === repassword;
     }
   return (
     <View style={styles.container}>
       <View style={styles.Middle}>
-        <Text style={styles.LoginText}>Signup</Text>
+        <Text style={styles.LoginText}>Sign up</Text>
       </View>
       
 
@@ -28,6 +72,8 @@ function Signup() {
         
         <View style={styles.emailInput}>
           <Input
+            value={fullname}
+            onChangeText={(text) => setFulname(text)}
             InputLeftElement={
               <Icon
               
@@ -59,6 +105,8 @@ function Signup() {
         
         <View style={styles.emailInput}>
           <Input
+          value={address}
+          onChangeText={(text) => setAddress(text)}
             InputLeftElement={
               <Icon
               
@@ -85,7 +133,40 @@ function Signup() {
           />
         </View>
       </View>
+          
+    {/*phonenumber */} 
+    <View style={styles.buttonStyleX}>
+        
+        <View style={styles.emailInput}>
+          <Input
+          value={phone_number}
+          onChangeText={(text) => setPhonenumber(text)}
+            InputLeftElement={
+              <Icon
+              
+                as={<Entypo name="phone" />}
+                size="sm"
+                m={2}
+                _light={{
+                  color: "#336666",
+                }}
+                _dark={{
+                  color: "gray.300",
+                }}
+              />
+            }
+            variant="outline"
+            placeholder="Phone number"
+            _light={{
+              placeholderTextColor: "blueGray.400",
+            }}
+            _dark={{
+              placeholderTextColor: "blueGray.50",
+            }}
 
+          />
+        </View>
+      </View>      
     {/* Gender */}
     <View style={styles.buttonStyleX}>
       <Text style={styles.text2}>Select your gender:</Text>
@@ -108,6 +189,8 @@ function Signup() {
         
         <View style={styles.emailInput}>
           <Input
+            value={email}
+            onChangeText={(text) => setEmail(text)} 
             InputLeftElement={
               <Icon
                 as={<MaterialCommunityIcons name="email" />}
@@ -133,12 +216,14 @@ function Signup() {
           />
         </View>
       </View>
-
+            
       {/* Password Input Field */}
       <View style={styles.buttonStyleX}>
         
         <View style={styles.emailInput}>
           <Input
+            value={password}
+            onChangeText={(text) => setPassword(text)}
             InputLeftElement={
               <Icon
                 as={<FontAwesome5 name="key" />}
@@ -170,6 +255,8 @@ function Signup() {
         
         <View style={styles.emailInput}>
           <Input
+            value={repassword}
+            onChangeText={(text) => setrePassword(text)}
             InputLeftElement={
               <Icon
                 as={<FontAwesome5 name="key" />}
@@ -198,7 +285,7 @@ function Signup() {
 
       {/* Button */}
       <View style={styles.buttonStyle}>
-        <Button style={styles.buttonDesign}>
+        <Button style={styles.buttonDesign} onPress={handleRegister}>
             REGISTER NOW
         </Button>
       </View>
@@ -303,7 +390,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'lightgray',
-    //marginTop: 10,
+    // marginBottom: 1,
     borderRadius: 75, // Đặt bán kính là 1 nửa của chiều rộng/cao để tạo hình dạng tròn
   },
   selectedButton: {
